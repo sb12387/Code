@@ -1,0 +1,31 @@
+#Write a script to list all the movies in .CSV file with location and file size
+
+#-*-coding:utf8;-*-
+
+"""This code is made/tested using qpython3 on Android OS"""
+
+
+__author__ = 'SB <abc@gmail.com>'
+__license__ = 'Apache License, Version 2.0'
+
+import os
+import csv
+
+#the basepath can be changed as desired
+basepath= "/storage/extSdCard"
+csvfilepath = r"/storage/emulated/0/movieslist.csv"
+
+for root, folders, files in os.walk(basepath):
+    for file in files:
+        #the joined filename may vary depending on your OS
+        filename = os.path.join(root, file)
+        size= os.path.getsize(filename)/1024
+        mb = round(size/1024,2)
+        if (filename.endswith(".mp4") or filename.endswith(".mkv") or filename.endswith(".avi")) and mb >=700:
+            with open(csvfilepath ,"a+", newline = "") as csvfile:
+                row= os.path.basename(filename)+", "+str(size)+"MB"
+                print(row)
+                #using csv writer to write rows into the csv file
+                csvwriter = csv.writer(csvfile, delimiter=",", quotechar="'")
+                #it is best to split the string into a list for accurate csv row format
+                csvwriter.writerow(row.split(","))
